@@ -13,7 +13,9 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="no_recipes_match">No recipes match your pantry yet — add more ingredients!</string>
-    <string name="empty_pantry">Your pantry is empty. Tap + to add ingredients.</string>
+    <string name="empty_pantry">Your Pantry is Empty! 🍳
+        \n\nAdd your leftover ingredients to find out what you can cook right now.
+        \n\nNote: No need to log these four staples (salt, sugar, black pepper, or water) — we already assume you have these on hand!</string>
     <string name="recipe_detail">Recipe Detail</string>
     <string name="ingredients_label">Ingredients</string>
     <string name="preparation_label">Preparation Steps</string>
