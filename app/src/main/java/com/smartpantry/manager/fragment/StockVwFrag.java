@@ -1,11 +1,11 @@
 package com.smartpantry.manager.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.smartpantry.manager.R;
+import com.smartpantry.manager.activity.IngredFormAct;
 import com.smartpantry.manager.adapter.StockItemAdapt;
 import com.smartpantry.manager.database.PantryRoomDb;
 import com.smartpantry.manager.model.StockEntity;
@@ -45,9 +46,10 @@ public class StockVwFrag extends Fragment implements StockItemAdapt.OnStockActLi
         stkAdapt = new StockItemAdapt(new ArrayList<>(), this);
         recStockLst.setAdapter(stkAdapt);
 
-        // placeholder until entry form activity is built
+        // tap the + button to add a new ingredient
         fabAddStock.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Opening entry form...", Toast.LENGTH_SHORT).show();
+            Intent openAddInt = new Intent(getContext(), IngredFormAct.class);
+            startActivity(openAddInt);
         });
 
         return fragVw;
@@ -59,7 +61,7 @@ public class StockVwFrag extends Fragment implements StockItemAdapt.OnStockActLi
         loadStockInventory();
     }
 
-    // load items from room database in background
+    // handles loading items from room database in background
     public void loadStockInventory() {
         Executors.newSingleThreadExecutor().execute(() -> {
             List<StockEntity> freshStock = PantryRoomDb.getDbInst(getContext()).stockDataAcc().getAllStock();
@@ -78,9 +80,12 @@ public class StockVwFrag extends Fragment implements StockItemAdapt.OnStockActLi
         });
     }
 
+    // tap the item card to edit ingredient details
     @Override
     public void onStockClick(StockEntity itm) {
-        Toast.makeText(getContext(), "Selected: " + itm.getItmNm(), Toast.LENGTH_SHORT).show();
+        Intent openEditInt = new Intent(getContext(), IngredFormAct.class);
+        openEditInt.putExtra(IngredFormAct.KEY_ROW_ID, itm.getRowId());
+        startActivity(openEditInt);
     }
 
     @Override
@@ -93,7 +98,7 @@ public class StockVwFrag extends Fragment implements StockItemAdapt.OnStockActLi
         promptStockDelete(itm);
     }
 
-    // confirm before deleting an ingredient
+    // handles confirming before deleting an ingredient
     private void promptStockDelete(StockEntity delTarget) {
         new AlertDialog.Builder(requireContext())
                 .setTitle(R.string.confirm_delete_title)
