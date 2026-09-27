@@ -11,6 +11,13 @@ import java.util.Map;
 // checks recipes against available pantry stock
 public class RecpMatchLogic {
 
+    // basic nonleftover staples for now that people normally have in thier kitchens, I might add others here later
+    private static boolean isPantryStaple(String ingNm) {
+        String norm = IngredParseLogic.normTerm(ingNm);
+        return norm.equals("salt") || norm.equals("black pepper") || norm.equals("pepper")
+                || norm.equals("water") || norm.equals("sugar");
+    }
+
     // finds recipes where user has all required ingredients
     public static List<RecpEntity> findMatchingRecp(
             List<StockEntity> stkLst,
@@ -30,6 +37,11 @@ public class RecpMatchLogic {
 
             // check each required ingredient for this recipe
             for (RecpIngredEntity reqIng : reqIngLst) {
+                // skip checking if this is an assumed kitchen staple
+                if (isPantryStaple(reqIng.getIngNm())) {
+                    continue;
+                }
+
                 boolean reqMet = false;
 
                 // look through pantry stock items
