@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_stock"
+        android:icon="@drawable/ic_stock_box"
+        android:title="@string/title_pantry" />
+    <item
+        android:id="@+id/nav_recp"
+        android:icon="@drawable/ic_recp_book"
+        android:title="@string/title_recipes" />
+    <item
+        android:id="@+id/nav_pref"
+        android:icon="@drawable/ic_pref_gear"
+        android:title="@string/title_settings" />
+</menu>
