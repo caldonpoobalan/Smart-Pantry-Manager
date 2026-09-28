@@ -197,6 +197,15 @@
                     android:textStyle="bold"
                     android:textColor="?android:attr/textColorPrimary" />
 
+                <ImageView
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:contentDescription="@string/settings_about"
+                    android:src="@drawable/img_setting_about" />
+
                 <TextView
                     android:id="@+id/txt_app_info"
                     android:layout_width="match_parent"

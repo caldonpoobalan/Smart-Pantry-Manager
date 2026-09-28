@@ -102,6 +102,7 @@ public class PrefCfgFrag extends Fragment {
     // displays confirmation dialog before wiping pantry stock
     private void showResetConfirmationDialog() {
         new AlertDialog.Builder(requireContext())
+                .setIcon(R.drawable.img_reset_pantry)
                 .setTitle(R.string.reset_pantry_title)
                 .setMessage(R.string.reset_pantry_msg)
                 .setPositiveButton(R.string.reset_pantry, (dialog, which) -> {

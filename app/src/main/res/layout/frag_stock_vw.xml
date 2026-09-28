@@ -11,21 +11,36 @@
         android:layout_height="match_parent"
         tools:listitem="@layout/cell_stock_item" />
 
-    <TextView
-        android:id="@+id/txt_empty_notice"
+    <LinearLayout
+        android:id="@+id/lay_empty_notice"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
         android:gravity="center"
-        android:lineSpacingExtra="4dp"
-        android:text="@string/empty_pantry"
-        android:textSize="15sp"
-        android:textColor="?android:attr/textColorSecondary"
+        android:orientation="vertical"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginBottom="12dp"
+            android:contentDescription="@string/empty_pantry"
+            android:src="@drawable/img_empty_pantry" />
+
+        <TextView
+            android:id="@+id/txt_empty_notice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="4dp"
+            android:text="@string/empty_pantry"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="14sp" />
+    </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_stock"

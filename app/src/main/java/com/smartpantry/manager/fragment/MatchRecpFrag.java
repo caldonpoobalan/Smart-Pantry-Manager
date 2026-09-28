@@ -32,7 +32,8 @@ import java.util.concurrent.Executors;
 public class MatchRecpFrag extends Fragment implements RecpCardAdapt.OnRecpCardClickListener {
 
     private RecyclerView recMatchedLst;
-    private TextView txtZeroMatchWarn;
+    private View layZeroMatchNotice;
+    private View layActiveMatchBanner;
     private TextView txtRecpCounter;
     private RecpCardAdapt recpAdapt;
 
@@ -42,7 +43,8 @@ public class MatchRecpFrag extends Fragment implements RecpCardAdapt.OnRecpCardC
         View fragVw = inflater.inflate(R.layout.frag_match_recp, container, false);
 
         recMatchedLst = fragVw.findViewById(R.id.rec_matched_lst);
-        txtZeroMatchWarn = fragVw.findViewById(R.id.txt_zero_match_warn);
+        layZeroMatchNotice = fragVw.findViewById(R.id.lay_zero_match_notice);
+        layActiveMatchBanner = fragVw.findViewById(R.id.lay_active_match_banner);
         txtRecpCounter = fragVw.findViewById(R.id.txt_recp_counter);
 
         recMatchedLst.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -83,13 +85,14 @@ public class MatchRecpFrag extends Fragment implements RecpCardAdapt.OnRecpCardC
                     recpAdapt.refreshRecpData(matchedRecps);
                     int count = matchedRecps.size();
 
-                    // handles counter message and empty state based on number of matches
+                    // handles counter banner and empty state based on number of matches
                     if (count == 0) {
-                        txtZeroMatchWarn.setVisibility(View.VISIBLE);
+                        layZeroMatchNotice.setVisibility(View.VISIBLE);
+                        layActiveMatchBanner.setVisibility(View.GONE);
                         recMatchedLst.setVisibility(View.GONE);
-                        txtRecpCounter.setText("You can't make any recipes yet");
                     } else {
-                        txtZeroMatchWarn.setVisibility(View.GONE);
+                        layZeroMatchNotice.setVisibility(View.GONE);
+                        layActiveMatchBanner.setVisibility(View.VISIBLE);
                         recMatchedLst.setVisibility(View.VISIBLE);
 
                         if (count == 1) {

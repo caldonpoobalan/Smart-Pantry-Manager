@@ -29,7 +29,7 @@ import java.util.concurrent.Executors;
 public class StockVwFrag extends Fragment implements StockItemAdapt.OnStockActListener {
 
     private RecyclerView recStockLst;
-    private TextView txtEmptyNotice;
+    private View layEmptyNotice;
     private FloatingActionButton fabAddStock;
     private StockItemAdapt stkAdapt;
 
@@ -39,7 +39,7 @@ public class StockVwFrag extends Fragment implements StockItemAdapt.OnStockActLi
         View fragVw = inflater.inflate(R.layout.frag_stock_vw, container, false);
 
         recStockLst = fragVw.findViewById(R.id.rec_stock_lst);
-        txtEmptyNotice = fragVw.findViewById(R.id.txt_empty_notice);
+        layEmptyNotice = fragVw.findViewById(R.id.lay_empty_notice);
         fabAddStock = fragVw.findViewById(R.id.fab_add_stock);
 
         recStockLst.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -69,10 +69,10 @@ public class StockVwFrag extends Fragment implements StockItemAdapt.OnStockActLi
                 getActivity().runOnUiThread(() -> {
                     stkAdapt.refreshStockData(freshStock);
                     if (freshStock.isEmpty()) {
-                        txtEmptyNotice.setVisibility(View.VISIBLE);
+                        layEmptyNotice.setVisibility(View.VISIBLE);
                         recStockLst.setVisibility(View.GONE);
                     } else {
-                        txtEmptyNotice.setVisibility(View.GONE);
+                        layEmptyNotice.setVisibility(View.GONE);
                         recStockLst.setVisibility(View.VISIBLE);
                     }
                 });

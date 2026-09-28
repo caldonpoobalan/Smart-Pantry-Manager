@@ -25,6 +25,9 @@ public class HubHomeAct extends AppCompatActivity {
     // bottom navigation bar
     private BottomNavigationView btmNavBar;
 
+    // top navigation toolbar
+    private androidx.appcompat.widget.Toolbar barHubTopNav;
+
     // 5 days warning limit in milliseconds
     private static final long EXP_WARN_LIMIT_MS = 5L * 24 * 60 * 60 * 1000;
 
@@ -38,6 +41,10 @@ public class HubHomeAct extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_hub_home);
 
+        // handles top toolbar setup
+        barHubTopNav = findViewById(R.id.bar_hub_top_nav);
+        setSupportActionBar(barHubTopNav);
+
         btmNavBar = findViewById(R.id.btm_nav_bar);
 
         // handles bottom navigation tab selection
@@ -47,10 +54,19 @@ public class HubHomeAct extends AppCompatActivity {
 
             if (itmId == R.id.nav_stock) {
                 targetFrag = new StockVwFrag();
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setTitle(R.string.title_pantry);
+                }
             } else if (itmId == R.id.nav_recp) {
                 targetFrag = new MatchRecpFrag();
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setTitle(R.string.title_recipes);
+                }
             } else if (itmId == R.id.nav_pref) {
                 targetFrag = new PrefCfgFrag();
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setTitle(R.string.title_settings);
+                }
             }
 
             if (targetFrag != null) {
@@ -68,6 +84,9 @@ public class HubHomeAct extends AppCompatActivity {
                     .replace(R.id.frm_host_slot, new StockVwFrag())
                     .commit();
             btmNavBar.setSelectedItemId(R.id.nav_stock);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle(R.string.title_pantry);
+            }
 
             // checks if expiry alerts are enabled and displays reminder dialog
             boolean alertsEnabled = spSharedPrefs.getBoolean(PrefCfgFrag.KEY_ALERT_TOGGLE, true);
@@ -129,6 +148,7 @@ public class HubHomeAct extends AppCompatActivity {
         }
 
         new AlertDialog.Builder(this)
+                .setIcon(R.drawable.img_expiry_reminder)
                 .setTitle(R.string.expiry_alert_title)
                 .setMessage(msgBuilder.toString())
                 .setPositiveButton(R.string.dialog_ok, null)
