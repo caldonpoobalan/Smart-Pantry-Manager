@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.smartpantry.manager.R;
+import com.smartpantry.manager.fragment.MatchRecpFrag;
 import com.smartpantry.manager.fragment.StockVwFrag;
 
 // main navigation host activity
@@ -22,7 +23,7 @@ public class HubHomeAct extends AppCompatActivity {
 
         btmNavBar = findViewById(R.id.btm_nav_bar);
 
-        // handle bottom navigation tab selection
+        // handles bottom navigation tab selection
         btmNavBar.setOnItemSelectedListener(item -> {
             Fragment targetFrag = null;
             int itmId = item.getItemId();
@@ -30,7 +31,7 @@ public class HubHomeAct extends AppCompatActivity {
             if (itmId == R.id.nav_stock) {
                 targetFrag = new StockVwFrag();
             } else if (itmId == R.id.nav_recp) {
-                // will attach recipe suggestions fragment later
+                targetFrag = new MatchRecpFrag();
             } else if (itmId == R.id.nav_pref) {
                 // will attach settings fragment later
             }
@@ -44,7 +45,7 @@ public class HubHomeAct extends AppCompatActivity {
             return false;
         });
 
-        // show pantry stock fragment by default on first launch
+        // handles setting default view to pantry stock on first launch
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.frm_host_slot, new StockVwFrag())

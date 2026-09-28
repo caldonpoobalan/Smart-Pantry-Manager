@@ -14,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.smartpantry.manager.R;
 import com.smartpantry.manager.database.PantryRoomDb;
+import com.smartpantry.manager.logic.UnitConvertLogic;
 import com.smartpantry.manager.model.StockEntity;
 
 import java.text.SimpleDateFormat;
@@ -114,7 +115,7 @@ public class IngredFormAct extends AppCompatActivity {
             if (curStock != null) {
                 runOnUiThread(() -> {
                     edtIngNm.setText(curStock.getItmNm());
-                    edtQtyVal.setText(String.valueOf(curStock.getQtyVal()));
+                    edtQtyVal.setText(UnitConvertLogic.formatQty(curStock.getQtyVal()));
                     expDateMs = curStock.getExpDateMs();
                     refreshExpDisplay();
 

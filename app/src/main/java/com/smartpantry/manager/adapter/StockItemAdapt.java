@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.smartpantry.manager.R;
+import com.smartpantry.manager.logic.UnitConvertLogic;
 import com.smartpantry.manager.model.StockEntity;
 
 import java.text.SimpleDateFormat;
@@ -56,7 +57,7 @@ public class StockItemAdapt extends RecyclerView.Adapter<StockItemAdapt.StockHol
         holder.txtItmNm.setText(stkRowItm.getItmNm());
 
         String untStr = stkRowItm.getUntLbl() != null ? stkRowItm.getUntLbl() : "";
-        holder.txtQtyVal.setText(stkRowItm.getQtyVal() + " " + untStr);
+        holder.txtQtyVal.setText(UnitConvertLogic.formatQty(stkRowItm.getQtyVal()) + " " + untStr);
 
         // check expiry date and set warning colors
         if (stkRowItm.getExpDateMs() == null) {

@@ -14,7 +14,7 @@ public class RecpMatchLogic {
     // basic nonleftover staples for now that people normally have in thier kitchens, I might add others here later
     private static boolean isPantryStaple(String ingNm) {
         String norm = IngredParseLogic.normTerm(ingNm);
-        return norm.equals("salt") || norm.equals("black pepper") || norm.equals("pepper")
+        return norm.equals("salt") || norm.equals("black pepper")
                 || norm.equals("water") || norm.equals("sugar");
     }
 
@@ -50,14 +50,17 @@ public class RecpMatchLogic {
                         String reqUnt = reqIng.getUntMeas() != null ? reqIng.getUntMeas().trim().toLowerCase() : "";
                         String stkUnt = stkItm.getUntLbl() != null ? stkItm.getUntLbl().trim().toLowerCase() : "";
 
-                        // if units match then check quantity
-                        if (reqUnt.equals(stkUnt)) {
-                            if (stkItm.getQtyVal() >= reqIng.getReqQty()) {
+                        // handles unit conversion and quantity comparison
+                        if (UnitConvertLogic.areUnitsCompatible(reqUnt, stkUnt)) {
+                            double baseStkQty = UnitConvertLogic.toBaseUnit(stkItm.getQtyVal(), stkUnt);
+                            double baseReqQty = UnitConvertLogic.toBaseUnit(reqIng.getReqQty(), reqUnt);
+
+                            if (baseStkQty >= baseReqQty) {
                                 reqMet = true;
                                 break;
                             }
                         } else {
-                            // match if unit format differs
+                            // handles fallback if units cannot be converted
                             reqMet = true;
                             break;
                         }

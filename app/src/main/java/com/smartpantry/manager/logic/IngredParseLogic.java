@@ -51,8 +51,36 @@ public class IngredParseLogic {
         return clnWord;
     }
 
-    // checks if two ingredient names match
+    // checks if two ingredient names match by whole string or individual word
     public static boolean isMatch(String stkWord, String recpWord) {
-        return normTerm(stkWord).equals(normTerm(recpWord));
+        if (stkWord == null || recpWord == null) {
+            return false;
+        }
+
+        String nStk = normTerm(stkWord);
+        String nRec = normTerm(recpWord);
+
+        // handles exact match
+        if (nStk.equals(nRec)) {
+            return true;
+        }
+
+        // handles multi-word items (like red tomato or green tomatoes)
+        String[] stkWords = stkWord.trim().toLowerCase().split("\\s+");
+        for (String w : stkWords) {
+            if (normTerm(w).equals(nRec)) {
+                return true;
+            }
+        }
+
+        // handles multi-word recipe requirements (like recipe needs blue cheese instead of cheese)
+        String[] recpWords = recpWord.trim().toLowerCase().split("\\s+");
+        for (String w : recpWords) {
+            if (normTerm(w).equals(nStk)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
