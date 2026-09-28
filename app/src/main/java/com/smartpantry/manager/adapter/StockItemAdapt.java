@@ -1,5 +1,7 @@
 package com.smartpantry.manager.adapter;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.smartpantry.manager.R;
+import com.smartpantry.manager.fragment.PrefCfgFrag;
 import com.smartpantry.manager.logic.UnitConvertLogic;
 import com.smartpantry.manager.model.StockEntity;
 
@@ -56,8 +59,10 @@ public class StockItemAdapt extends RecyclerView.Adapter<StockItemAdapt.StockHol
         StockEntity stkRowItm = stkItmLst.get(position);
         holder.txtItmNm.setText(stkRowItm.getItmNm());
 
-        String untStr = stkRowItm.getUntLbl() != null ? stkRowItm.getUntLbl() : "";
-        holder.txtQtyVal.setText(UnitConvertLogic.formatQty(stkRowItm.getQtyVal()) + " " + untStr);
+        // formats quantity and unit according to active unit preference
+        SharedPreferences spSharedPrefs = holder.itemView.getContext().getSharedPreferences(PrefCfgFrag.PREF_STORAGE_TAG, Context.MODE_PRIVATE);
+        boolean isImperial = "Imperial".equalsIgnoreCase(spSharedPrefs.getString(PrefCfgFrag.KEY_UNIT_SYS, "Metric"));
+        holder.txtQtyVal.setText(UnitConvertLogic.formatDisplayQtyAndUnit(stkRowItm.getQtyVal(), stkRowItm.getUntLbl(), isImperial));
 
         // check expiry date and set warning colors
         if (stkRowItm.getExpDateMs() == null) {

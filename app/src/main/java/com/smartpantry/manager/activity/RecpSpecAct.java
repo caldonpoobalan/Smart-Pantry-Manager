@@ -1,5 +1,6 @@
 package com.smartpantry.manager.activity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -8,6 +9,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.smartpantry.manager.R;
 import com.smartpantry.manager.database.PantryRoomDb;
+import com.smartpantry.manager.fragment.PrefCfgFrag;
 import com.smartpantry.manager.logic.UnitConvertLogic;
 import com.smartpantry.manager.model.RecpEntity;
 import com.smartpantry.manager.model.RecpIngredEntity;
@@ -57,17 +59,36 @@ public class RecpSpecAct extends AppCompatActivity {
             runOnUiThread(() -> {
                 if (curRecp != null) {
                     txtSpecHeading.setText(curRecp.getRecpNm());
-                    txtPrepStepsBlock.setText(curRecp.getPrepStepTxt());
+
+                    // displays dual oven temperatures and unit-neutral preparation text
+                    String steps = curRecp.getPrepStepTxt();
+                    if (steps != null) {
+                        steps = steps.replace("200°C", "200°C (400°F)")
+                                     .replace("50 g shredded cheese", "the shredded cheese")
+                                     .replace("45 ml cream", "cream")
+                                     .replace("15 ml cream", "cream");
+                    }
+                    txtPrepStepsBlock.setText(steps);
                 }
 
                 // handles formatting bulleted list of required ingredients
                 StringBuilder bldIngredTxt = new StringBuilder();
                 if (ingredLst != null) {
+                    SharedPreferences spSharedPrefs = getSharedPreferences(PrefCfgFrag.PREF_STORAGE_TAG, MODE_PRIVATE);
+                    boolean isImperial = "Imperial".equalsIgnoreCase(spSharedPrefs.getString(PrefCfgFrag.KEY_UNIT_SYS, "Metric"));
+
                     for (RecpIngredEntity curIng : ingredLst) {
-                        bldIngredTxt.append("• ")
-                                .append(UnitConvertLogic.formatQty(curIng.getReqQty())).append(" ")
-                                .append(curIng.getUntMeas()).append(" ")
-                                .append(curIng.getIngNm()).append("\n");
+                        String ingName = curIng.getIngNm() != null ? curIng.getIngNm().trim().toLowerCase() : "";
+
+                        // displays seasoning staples as to taste
+                        if (ingName.equals("salt") || ingName.equals("black pepper")) {
+                            bldIngredTxt.append("• ").append(curIng.getIngNm()).append(" (to taste)\n");
+                        } else {
+                            String formattedQtyAndUnit = UnitConvertLogic.formatDisplayQtyAndUnit(curIng.getReqQty(), curIng.getUntMeas(), isImperial);
+                            bldIngredTxt.append("• ")
+                                    .append(formattedQtyAndUnit).append(" ")
+                                    .append(curIng.getIngNm()).append("\n");
+                        }
                     }
                 }
                 txtReqIngredBlock.setText(bldIngredTxt.toString().trim());

@@ -38,4 +38,8 @@ public interface StockDataAcc {
     // find single stock item by id
     @Query("SELECT * FROM stock_tbl WHERE row_id = :rowId")
     StockEntity getStockById(int rowId);
+
+    // clears all items from the pantry table
+    @Query("DELETE FROM stock_tbl")
+    void clearAllStock();
 }

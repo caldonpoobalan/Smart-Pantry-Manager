@@ -9,7 +9,7 @@
         android:id="@+id/bar_top_nav"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="@color/toolbar_bg"
         app:titleTextColor="@android:color/white" />
 
     <ScrollView
@@ -62,13 +62,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_pick_exp"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/set_expiry_date" />
+                android:text="@string/set_expiry_date"
+                android:textColor="@color/heading_blue"
+                app:strokeColor="@color/heading_blue" />
 
             <TextView
                 android:id="@+id/txt_exp_disp"
@@ -85,7 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:backgroundTint="@color/primary"
+                app:backgroundTint="@color/btn_save_bg"
                 android:text="@string/save"
                 android:textColor="@android:color/white" />
 

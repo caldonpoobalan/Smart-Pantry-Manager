@@ -17,13 +17,24 @@
         \n\nAdd your leftover ingredients to find out what you can cook right now.
         \n\nNote: No need to log these four staples (salt, sugar, black pepper, or water) — we already assume you have these on hand!</string>
     <string name="recipe_detail">Recipe Detail</string>
-    <string name="ingredients_label">Ingredients</string>
-    <string name="preparation_label">Preparation Steps</string>
+    <string name="ingredients_label">Ingredients:</string>
+    <string name="preparation_label">Preparation Steps:</string>
     <string name="settings_expiry_alerts">Expiry Alerts</string>
-    <string name="settings_expiry_summary">Get notified when items are about to expire</string>
+    <string name="settings_expiry_summary">Show in-app reminders for expiring items</string>
     <string name="settings_unit_preference">Unit Preference</string>
-    <string name="settings_about">About</string>
-    <string name="settings_about_desc">Smart Pantry Manager v1.0\nReduce food waste by cooking with what you have.</string>
+    <string name="settings_dark_theme">Dark Theme</string>
+    <string name="settings_dark_theme_desc">Enable dark mode appearance</string>
+    <string name="reset_pantry">Reset Pantry</string>
+    <string name="reset_pantry_title">Reset Pantry?</string>
+    <string name="reset_pantry_msg">Are you sure you want to remove all ingredients from your pantry?\n\nThis cannot be reversed!</string>
+    <string name="reset_pantry_cleared">Pantry inventory cleared!</string>
+    <string name="expiry_alert_title">Reminder!</string>
+    <string name="expiry_alert_expiring">One or more of your pantry ingredients are expiring soon.</string>
+    <string name="expiry_alert_expired">%d item(s) have expired!</string>
+    <string name="dialog_ok">OK</string>
+    <string name="settings_about">About This App</string>
+    <string name="about_app_name">Smart Pantry Manager (v1.0.0)</string>
+    <string name="about_app_desc">Helping people reduce food waste by cooking with what they already have.\n\nBuilt by Caldon Poobalan - 402306580\nMobile App Development 700</string>
     <string name="validation_name_required">Ingredient name is required</string>
     <string name="validation_quantity_required">Quantity must be greater than 0</string>
     <string name="confirm_delete_title">Delete Ingredient</string>

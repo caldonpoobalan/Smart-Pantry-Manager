@@ -9,7 +9,7 @@
         android:id="@+id/bar_spec_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="@color/toolbar_bg"
         app:titleTextColor="@android:color/white" />
 
     <ScrollView
@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="@string/ingredients_label"
-                android:textColor="@color/primary"
+                android:textColor="@color/heading_blue"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -60,7 +60,7 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/preparation_label"
-                android:textColor="@color/primary"
+                android:textColor="@color/heading_blue"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 

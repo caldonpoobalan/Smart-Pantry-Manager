@@ -20,7 +20,7 @@ public class RecpSeedData {
         long r1 = recpDao.insertRecp(new RecpEntity(
                 "Baked Tomato and Cheese",
                 "Warm baked tomato halves topped with bubbling melted cheese",
-                "1. Preheat oven to 200°C.\n2. Place tomato halves cut-side up on a tray.\n3. Sprinkle with salt and black pepper.\n4. Top each half with 50 g shredded cheese.\n5. Bake for 10-12 minutes until cheese bubbles."));
+                "1. Preheat oven to 200°C (400°F).\n2. Place tomato halves cut-side up on a tray.\n3. Sprinkle with salt and black pepper.\n4. Top each half with shredded cheese.\n5. Bake for 10-12 minutes until cheese bubbles."));
 
         List<RecpIngredEntity> i1 = new ArrayList<>();
         i1.add(new RecpIngredEntity((int) r1, "tomato", 2, "pcs"));
@@ -33,7 +33,7 @@ public class RecpSeedData {
         long r2 = recpDao.insertRecp(new RecpEntity(
                 "Cream Potato Fries",
                 "Crispy golden oven-baked potato wedges tossed in cream",
-                "1. Preheat oven to 200°C.\n2. Cut potatoes into thin wedges.\n3. Toss wedges in a bowl with 45 ml cream, salt, and black pepper.\n4. Spread on a baking sheet.\n5. Bake for 25-30 minutes until golden."));
+                "1. Preheat oven to 200°C (400°F).\n2. Cut potatoes into thin wedges.\n3. Toss wedges in a bowl with cream, salt, and black pepper.\n4. Spread on a baking sheet.\n5. Bake for 25-30 minutes until golden."));
 
         List<RecpIngredEntity> i2 = new ArrayList<>();
         i2.add(new RecpIngredEntity((int) r2, "potato", 2, "pcs"));
@@ -46,7 +46,7 @@ public class RecpSeedData {
         long r3 = recpDao.insertRecp(new RecpEntity(
                 "Devil Eggs",
                 "Creamy whipped yolk stuffed hard-boiled eggs",
-                "1. Peel hard-boiled eggs and cut in half lengthwise.\n2. Remove yellow yolks and place in a bowl.\n3. Add 15 ml cream, salt, and black pepper to the yolks.\n4. Mash with a fork until smooth.\n5. Spoon mixture back into the whites."));
+                "1. Peel hard-boiled eggs and cut in half lengthwise.\n2. Remove yellow yolks and place in a bowl.\n3. Add cream, salt, and black pepper to the yolks.\n4. Mash with a fork until smooth.\n5. Spoon mixture back into the whites."));
 
         List<RecpIngredEntity> i3 = new ArrayList<>();
         i3.add(new RecpIngredEntity((int) r3, "egg", 3, "pcs"));

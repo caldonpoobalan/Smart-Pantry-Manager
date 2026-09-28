@@ -22,4 +22,11 @@
 
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+
+    <!-- section titles -->
+    <color name="heading_blue">#1A2F4C</color>
+
+    <!-- toolbar and button backgrounds -->
+    <color name="toolbar_bg">#1A2F4C</color>
+    <color name="btn_save_bg">#1A2F4C</color>
 </resources>

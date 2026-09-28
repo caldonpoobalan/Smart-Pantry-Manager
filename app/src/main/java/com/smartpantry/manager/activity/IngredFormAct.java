@@ -1,6 +1,7 @@
 package com.smartpantry.manager.activity;
 
 import android.app.DatePickerDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.ArrayAdapter;
@@ -14,6 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.smartpantry.manager.R;
 import com.smartpantry.manager.database.PantryRoomDb;
+import com.smartpantry.manager.fragment.PrefCfgFrag;
 import com.smartpantry.manager.logic.UnitConvertLogic;
 import com.smartpantry.manager.model.StockEntity;
 
@@ -39,7 +41,7 @@ public class IngredFormAct extends AppCompatActivity {
     private int targetRowId = -1;
 
     // standard physical units for pantry inventory
-    private final String[] unitOptArr = {"pcs", "g", "kg", "ml", "L"};
+    private String[] unitOptArr = {"pcs", "g", "kg", "ml", "L"};
     private final SimpleDateFormat dateFmt = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
     @Override
@@ -60,6 +62,15 @@ public class IngredFormAct extends AppCompatActivity {
         btnPickExp = findViewById(R.id.btn_pick_exp);
         txtExpDisp = findViewById(R.id.txt_exp_disp);
         btnSaveRec = findViewById(R.id.btn_save_record);
+
+        // sets available measurement units based on user preference
+        SharedPreferences spSharedPrefs = getSharedPreferences(PrefCfgFrag.PREF_STORAGE_TAG, MODE_PRIVATE);
+        boolean isImperial = "Imperial".equalsIgnoreCase(spSharedPrefs.getString(PrefCfgFrag.KEY_UNIT_SYS, "Metric"));
+        if (isImperial) {
+            unitOptArr = new String[]{"pcs", "oz", "lb", "fl oz", "gal"};
+        } else {
+            unitOptArr = new String[]{"pcs", "g", "kg", "ml", "L"};
+        }
 
         // handles unit options spinner setup
         ArrayAdapter<String> adaptSpn = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, unitOptArr);
@@ -115,12 +126,63 @@ public class IngredFormAct extends AppCompatActivity {
             if (curStock != null) {
                 runOnUiThread(() -> {
                     edtIngNm.setText(curStock.getItmNm());
-                    edtQtyVal.setText(UnitConvertLogic.formatQty(curStock.getQtyVal()));
                     expDateMs = curStock.getExpDateMs();
                     refreshExpDisplay();
 
+                    SharedPreferences spPrefs = getSharedPreferences(PrefCfgFrag.PREF_STORAGE_TAG, MODE_PRIVATE);
+                    boolean isImperial = "Imperial".equalsIgnoreCase(spPrefs.getString(PrefCfgFrag.KEY_UNIT_SYS, "Metric"));
+
+                    double displayQty = curStock.getQtyVal();
+                    String displayUnit = curStock.getUntLbl() != null ? curStock.getUntLbl() : "pcs";
+
+                    // converts existing units if user switched preference system
+                    String norm = displayUnit.trim().toLowerCase();
+                    if (isImperial) {
+                        if (norm.equals("g") || norm.equals("kg")) {
+                            double baseGrams = UnitConvertLogic.toBaseUnit(displayQty, norm);
+                            if (baseGrams >= 453.592) {
+                                displayQty = Math.round((baseGrams / 453.592) * 10.0) / 10.0;
+                                displayUnit = "lb";
+                            } else {
+                                displayQty = Math.round((baseGrams / 28.3495) * 10.0) / 10.0;
+                                displayUnit = "oz";
+                            }
+                        } else if (norm.equals("ml") || norm.equals("l")) {
+                            double baseMl = UnitConvertLogic.toBaseUnit(displayQty, norm);
+                            if (baseMl >= 3785.41) {
+                                displayQty = Math.round((baseMl / 3785.41) * 10.0) / 10.0;
+                                displayUnit = "gal";
+                            } else {
+                                displayQty = Math.round((baseMl / 29.5735) * 10.0) / 10.0;
+                                displayUnit = "fl oz";
+                            }
+                        }
+                    } else {
+                        if (norm.equals("oz") || norm.equals("lb")) {
+                            double baseGrams = UnitConvertLogic.toBaseUnit(displayQty, norm);
+                            if (baseGrams >= 1000.0) {
+                                displayQty = Math.round((baseGrams / 1000.0) * 10.0) / 10.0;
+                                displayUnit = "kg";
+                            } else {
+                                displayQty = Math.round(baseGrams * 10.0) / 10.0;
+                                displayUnit = "g";
+                            }
+                        } else if (norm.equals("fl oz") || norm.equals("gal")) {
+                            double baseMl = UnitConvertLogic.toBaseUnit(displayQty, norm);
+                            if (baseMl >= 1000.0) {
+                                displayQty = Math.round((baseMl / 1000.0) * 10.0) / 10.0;
+                                displayUnit = "L";
+                            } else {
+                                displayQty = Math.round(baseMl * 10.0) / 10.0;
+                                displayUnit = "ml";
+                            }
+                        }
+                    }
+
+                    edtQtyVal.setText(UnitConvertLogic.formatQty(displayQty));
+
                     for (int i = 0; i < unitOptArr.length; i++) {
-                        if (unitOptArr[i].equals(curStock.getUntLbl())) {
+                        if (unitOptArr[i].equalsIgnoreCase(displayUnit)) {
                             spnUnitOpt.setSelection(i);
                             break;
                         }

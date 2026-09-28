@@ -1,14 +1,23 @@
 package com.smartpantry.manager.activity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.smartpantry.manager.R;
+import com.smartpantry.manager.database.PantryRoomDb;
 import com.smartpantry.manager.fragment.MatchRecpFrag;
+import com.smartpantry.manager.fragment.PrefCfgFrag;
 import com.smartpantry.manager.fragment.StockVwFrag;
+import com.smartpantry.manager.model.StockEntity;
+
+import java.util.List;
+import java.util.concurrent.Executors;
 
 // main navigation host activity
 public class HubHomeAct extends AppCompatActivity {
@@ -16,8 +25,16 @@ public class HubHomeAct extends AppCompatActivity {
     // bottom navigation bar
     private BottomNavigationView btmNavBar;
 
+    // 5 days warning limit in milliseconds
+    private static final long EXP_WARN_LIMIT_MS = 5L * 24 * 60 * 60 * 1000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // applies user dark theme preference on activity creation
+        SharedPreferences spSharedPrefs = getSharedPreferences(PrefCfgFrag.PREF_STORAGE_TAG, MODE_PRIVATE);
+        boolean isDarkTheme = spSharedPrefs.getBoolean(PrefCfgFrag.KEY_DARK_THEME, false);
+        AppCompatDelegate.setDefaultNightMode(isDarkTheme ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_hub_home);
 
@@ -33,7 +50,7 @@ public class HubHomeAct extends AppCompatActivity {
             } else if (itmId == R.id.nav_recp) {
                 targetFrag = new MatchRecpFrag();
             } else if (itmId == R.id.nav_pref) {
-                // will attach settings fragment later
+                targetFrag = new PrefCfgFrag();
             }
 
             if (targetFrag != null) {
@@ -51,6 +68,70 @@ public class HubHomeAct extends AppCompatActivity {
                     .replace(R.id.frm_host_slot, new StockVwFrag())
                     .commit();
             btmNavBar.setSelectedItemId(R.id.nav_stock);
+
+            // checks if expiry alerts are enabled and displays reminder dialog
+            boolean alertsEnabled = spSharedPrefs.getBoolean(PrefCfgFrag.KEY_ALERT_TOGGLE, true);
+            if (alertsEnabled) {
+                checkExpiringItemsAlert();
+            }
         }
+    }
+
+    // checks for expired or expiring ingredients in the background and shows reminder
+    private void checkExpiringItemsAlert() {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            List<StockEntity> stockList = PantryRoomDb.getDbInst(this).stockDataAcc().getAllStock();
+            if (stockList == null || stockList.isEmpty()) {
+                return;
+            }
+
+            long nowMs = System.currentTimeMillis();
+            int expiredCount = 0;
+            int expiringSoonCount = 0;
+
+            for (StockEntity item : stockList) {
+                if (item.getExpDateMs() != null) {
+                    long diffMs = item.getExpDateMs() - nowMs;
+                    if (diffMs < 0) {
+                        expiredCount++;
+                    } else if (diffMs <= EXP_WARN_LIMIT_MS) {
+                        expiringSoonCount++;
+                    }
+                }
+            }
+
+            if (expiredCount > 0 || expiringSoonCount > 0) {
+                int finalExpiredCount = expiredCount;
+                int finalExpiringSoonCount = expiringSoonCount;
+
+                runOnUiThread(() -> {
+                    if (!isFinishing() && !isDestroyed()) {
+                        showExpiryPopup(finalExpiringSoonCount, finalExpiredCount);
+                    }
+                });
+            }
+        });
+    }
+
+    // displays expiry reminder dialog popup
+    private void showExpiryPopup(int expiringCount, int expiredCount) {
+        StringBuilder msgBuilder = new StringBuilder();
+
+        if (expiringCount > 0) {
+            msgBuilder.append(getString(R.string.expiry_alert_expiring));
+        }
+
+        if (expiredCount > 0) {
+            if (msgBuilder.length() > 0) {
+                msgBuilder.append("\n\n");
+            }
+            msgBuilder.append(String.format(getString(R.string.expiry_alert_expired), expiredCount));
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.expiry_alert_title)
+                .setMessage(msgBuilder.toString())
+                .setPositiveButton(R.string.dialog_ok, null)
+                .show();
     }
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- dark mode ui colors -->
+    <color name="background">#121820</color>
+    <color name="surface">#1E293B</color>
+    <color name="divider">#334155</color>
+
+    <color name="text_primary">#F8FAFC</color>
+    <color name="text_secondary">#94A3B8</color>
+
+    <!-- section titles in dark mode -->
+    <color name="heading_blue">#60A5FA</color>
+
+    <!-- toolbar and button backgrounds in dark mode -->
+    <color name="toolbar_bg">#1E293B</color>
+    <color name="btn_save_bg">#2563EB</color>
+</resources>
