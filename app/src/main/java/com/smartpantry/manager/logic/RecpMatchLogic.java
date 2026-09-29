@@ -59,10 +59,32 @@ public class RecpMatchLogic {
                                 reqMet = true;
                                 break;
                             }
+                        } else if (stkUnt.equals("pcs")) {
+                            // handles converting stocked pieces to grams for recipe requirements
+                            double pieceWeight = UnitConvertLogic.getEstimatedPieceWeight(stkItm.getItmNm());
+                            double estStkGrams = stkItm.getQtyVal() * pieceWeight;
+                            double baseReqQty = UnitConvertLogic.toBaseUnit(reqIng.getReqQty(), reqUnt);
+
+                            if (estStkGrams >= baseReqQty) {
+                                reqMet = true;
+                                break;
+                            }
+                        } else if (reqUnt.equals("pcs")) {
+                            // handles converting required pieces to grams against stocked weight
+                            double pieceWeight = UnitConvertLogic.getEstimatedPieceWeight(reqIng.getIngNm());
+                            double estReqGrams = reqIng.getReqQty() * pieceWeight;
+                            double baseStkQty = UnitConvertLogic.toBaseUnit(stkItm.getQtyVal(), stkUnt);
+
+                            if (baseStkQty >= estReqGrams) {
+                                reqMet = true;
+                                break;
+                            }
                         } else {
-                            // handles fallback if units cannot be converted
-                            reqMet = true;
-                            break;
+                            // handles fallback for non-convertible units
+                            if (stkItm.getQtyVal() >= reqIng.getReqQty()) {
+                                reqMet = true;
+                                break;
+                            }
                         }
                     }
                 }

@@ -18,14 +18,15 @@ public class UnitConvertLogic {
         // handles weight compatibility (grams, kilograms, ounces, pounds)
         boolean isWeightA = unitA.equals("g") || unitA.equals("kg") || unitA.equals("oz") || unitA.equals("lb");
         boolean isWeightB = unitB.equals("g") || unitB.equals("kg") || unitB.equals("oz") || unitB.equals("lb");
-        if (isWeightA && isWeightB) {
-            return true;
-        }
 
         // handles volume compatibility (milliliters, liters, fluid ounces, gallons)
         boolean isVolumeA = unitA.equals("ml") || unitA.equals("l") || unitA.equals("fl oz") || unitA.equals("gal");
         boolean isVolumeB = unitB.equals("ml") || unitB.equals("l") || unitB.equals("fl oz") || unitB.equals("gal");
-        if (isVolumeA && isVolumeB) {
+
+        // handles cross-compatibility between kitchen weight and volume (1g = 1ml, 1kg = 1L)
+        boolean isMeasurableA = isWeightA || isVolumeA;
+        boolean isMeasurableB = isWeightB || isVolumeB;
+        if (isMeasurableA && isMeasurableB) {
             return true;
         }
 
@@ -67,6 +68,31 @@ public class UnitConvertLogic {
 
         // base units (g, ml, pcs) remain unchanged
         return qty;
+    }
+
+    // handles estimated piece weight in grams for common items
+    public static double getEstimatedPieceWeight(String ingredName) {
+        if (ingredName == null) {
+            return 100.0;
+        }
+        String name = ingredName.trim().toLowerCase();
+
+        // handles common fresh produce with standard portion sizes
+        if (name.contains("egg")) {
+            return 50.0;
+        }
+        if (name.contains("tomato")) {
+            return 120.0;
+        }
+        if (name.contains("potato") || name.contains("onion")) {
+            return 150.0;
+        }
+        if (name.contains("chicken")) {
+            return 200.0;
+        }
+
+        // default average weight for piece items
+        return 100.0;
     }
 
     // handles formatting quantity to hide doubles unless a user enters them

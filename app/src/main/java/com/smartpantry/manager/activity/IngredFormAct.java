@@ -77,16 +77,31 @@ public class IngredFormAct extends AppCompatActivity {
         adaptSpn.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnUnitOpt.setAdapter(adaptSpn);
 
+        TextView txtTipsTitle = findViewById(R.id.txt_form_tips_title);
+        TextView txtTipsBody = findViewById(R.id.txt_form_tips_body);
+
         // checks if this is an edit or add operation
         targetRowId = getIntent().getIntExtra(KEY_ROW_ID, -1);
         if (targetRowId > 0) {
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setTitle(R.string.edit_ingredient);
             }
+            if (txtTipsTitle != null) {
+                txtTipsTitle.setText(R.string.edit_ingredient_tips_title);
+            }
+            if (txtTipsBody != null) {
+                txtTipsBody.setText(R.string.edit_ingredient_tips_body);
+            }
             loadExistingStock();
         } else {
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setTitle(R.string.add_ingredient);
+            }
+            if (txtTipsTitle != null) {
+                txtTipsTitle.setText(R.string.add_ingredient_tips_title);
+            }
+            if (txtTipsBody != null) {
+                txtTipsBody.setText(R.string.add_ingredient_tips_body);
             }
         }
 
