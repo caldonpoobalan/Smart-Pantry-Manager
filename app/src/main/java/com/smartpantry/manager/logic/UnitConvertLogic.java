@@ -121,21 +121,33 @@ public class UnitConvertLogic {
             double baseGrams = toBaseUnit(rawQty, normUnit);
             if (isImperial) {
                 if (baseGrams >= 453.592) {
-                    double lbs = Math.round((baseGrams / 453.592) * 10.0) / 10.0;
+                    if (normUnit.equals("lb")) {
+                        return formatQty(rawQty) + " lb";
+                    }
+                    double lbs = Math.round((baseGrams / 453.592) * 100.0) / 100.0;
                     return formatQty(lbs) + " lb";
                 } else {
-                    double oz = Math.round((baseGrams / 28.3495) * 10.0) / 10.0;
+                    if (normUnit.equals("oz")) {
+                        return formatQty(rawQty) + " oz";
+                    }
+                    double oz = Math.round((baseGrams / 28.3495) * 100.0) / 100.0;
                     if (oz <= 0.0 && baseGrams > 0) {
-                        return "< 0.1 oz";
+                        return "< 0.01 oz";
                     }
                     return formatQty(oz) + " oz";
                 }
             } else {
                 if (baseGrams >= 1000.0) {
-                    double kg = Math.round((baseGrams / 1000.0) * 10.0) / 10.0;
+                    if (normUnit.equals("kg")) {
+                        return formatQty(rawQty) + " kg";
+                    }
+                    double kg = Math.round((baseGrams / 1000.0) * 100.0) / 100.0;
                     return formatQty(kg) + " kg";
                 } else {
-                    double g = Math.round(baseGrams * 10.0) / 10.0;
+                    if (normUnit.equals("g")) {
+                        return formatQty(rawQty) + " g";
+                    }
+                    double g = Math.round(baseGrams * 100.0) / 100.0;
                     return formatQty(g) + " g";
                 }
             }
@@ -147,21 +159,33 @@ public class UnitConvertLogic {
             double baseMl = toBaseUnit(rawQty, normUnit);
             if (isImperial) {
                 if (baseMl >= 3785.41) {
-                    double gal = Math.round((baseMl / 3785.41) * 10.0) / 10.0;
+                    if (normUnit.equals("gal")) {
+                        return formatQty(rawQty) + " gal";
+                    }
+                    double gal = Math.round((baseMl / 3785.41) * 100.0) / 100.0;
                     return formatQty(gal) + " gal";
                 } else {
-                    double flOz = Math.round((baseMl / 29.5735) * 10.0) / 10.0;
+                    if (normUnit.equals("fl oz")) {
+                        return formatQty(rawQty) + " fl oz";
+                    }
+                    double flOz = Math.round((baseMl / 29.5735) * 100.0) / 100.0;
                     if (flOz <= 0.0 && baseMl > 0) {
-                        return "< 0.1 fl oz";
+                        return "< 0.01 fl oz";
                     }
                     return formatQty(flOz) + " fl oz";
                 }
             } else {
                 if (baseMl >= 1000.0) {
-                    double l = Math.round((baseMl / 1000.0) * 10.0) / 10.0;
+                    if (normUnit.equals("l")) {
+                        return formatQty(rawQty) + " L";
+                    }
+                    double l = Math.round((baseMl / 1000.0) * 100.0) / 100.0;
                     return formatQty(l) + " L";
                 } else {
-                    double ml = Math.round(baseMl * 10.0) / 10.0;
+                    if (normUnit.equals("ml")) {
+                        return formatQty(rawQty) + " ml";
+                    }
+                    double ml = Math.round(baseMl * 100.0) / 100.0;
                     return formatQty(ml) + " ml";
                 }
             }

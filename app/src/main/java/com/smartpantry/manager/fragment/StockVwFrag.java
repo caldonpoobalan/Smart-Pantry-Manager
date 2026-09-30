@@ -5,6 +5,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,7 +35,9 @@ public class StockVwFrag extends Fragment implements StockItemAdapt.OnStockActLi
     private RecyclerView recStockLst;
     private View layEmptyNotice;
     private FloatingActionButton fabAddStock;
+    private EditText edtSearchStock;
     private StockItemAdapt stkAdapt;
+    private List<StockEntity> fullStockLst = new ArrayList<>();
 
     @Nullable
     @Override
@@ -41,10 +47,25 @@ public class StockVwFrag extends Fragment implements StockItemAdapt.OnStockActLi
         recStockLst = fragVw.findViewById(R.id.rec_stock_lst);
         layEmptyNotice = fragVw.findViewById(R.id.lay_empty_notice);
         fabAddStock = fragVw.findViewById(R.id.fab_add_stock);
+        edtSearchStock = fragVw.findViewById(R.id.edt_search_stock);
 
         recStockLst.setLayoutManager(new LinearLayoutManager(getContext()));
         stkAdapt = new StockItemAdapt(new ArrayList<>(), this);
         recStockLst.setAdapter(stkAdapt);
+
+        // handles real-time pantry search filtering
+        edtSearchStock.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int count, int after) {
+                filterPantryItems(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
 
         // tap the + button to add a new ingredient
         fabAddStock.setOnClickListener(v -> {
@@ -67,17 +88,54 @@ public class StockVwFrag extends Fragment implements StockItemAdapt.OnStockActLi
             List<StockEntity> freshStock = PantryRoomDb.getDbInst(getContext()).stockDataAcc().getAllStock();
             if (getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
-                    stkAdapt.refreshStockData(freshStock);
-                    if (freshStock.isEmpty()) {
-                        layEmptyNotice.setVisibility(View.VISIBLE);
-                        recStockLst.setVisibility(View.GONE);
+                    fullStockLst = freshStock;
+                    String curQuery = edtSearchStock != null ? edtSearchStock.getText().toString() : "";
+                    if (!TextUtils.isEmpty(curQuery)) {
+                        filterPantryItems(curQuery);
                     } else {
-                        layEmptyNotice.setVisibility(View.GONE);
-                        recStockLst.setVisibility(View.VISIBLE);
+                        stkAdapt.refreshStockData(freshStock);
+                        if (freshStock.isEmpty()) {
+                            layEmptyNotice.setVisibility(View.VISIBLE);
+                            recStockLst.setVisibility(View.GONE);
+                        } else {
+                            layEmptyNotice.setVisibility(View.GONE);
+                            recStockLst.setVisibility(View.VISIBLE);
+                        }
                     }
                 });
             }
         });
+    }
+
+    // filters pantry items based on search query text
+    private void filterPantryItems(String query) {
+        if (TextUtils.isEmpty(query)) {
+            stkAdapt.refreshStockData(fullStockLst);
+            if (fullStockLst.isEmpty()) {
+                layEmptyNotice.setVisibility(View.VISIBLE);
+                recStockLst.setVisibility(View.GONE);
+            } else {
+                layEmptyNotice.setVisibility(View.GONE);
+                recStockLst.setVisibility(View.VISIBLE);
+            }
+            return;
+        }
+
+        String clnQuery = query.trim().toLowerCase();
+        List<StockEntity> filtered = new ArrayList<>();
+        for (StockEntity item : fullStockLst) {
+            if (item.getItmNm() != null && item.getItmNm().toLowerCase().contains(clnQuery)) {
+                filtered.add(item);
+            }
+        }
+
+        stkAdapt.refreshStockData(filtered);
+        if (filtered.isEmpty()) {
+            recStockLst.setVisibility(View.GONE);
+        } else {
+            recStockLst.setVisibility(View.VISIBLE);
+            layEmptyNotice.setVisibility(View.GONE);
+        }
     }
 
     // tap the item card to edit ingredient details

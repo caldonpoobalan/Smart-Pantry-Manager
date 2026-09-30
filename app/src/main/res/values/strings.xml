@@ -11,13 +11,14 @@
         \n\nAdd your leftover ingredients to find out what you can cook right now.
         \n\nNote: No need to log these four staples (salt, sugar, black pepper, or water), we already assume you have these on hand!</string>
     <string name="no_expiry">No expiry set</string>
+    <string name="search_pantry_hint">Search pantry items...</string>
 
     <!-- Add & Edit Ingredient Form -->
     <string name="add_ingredient">Add Ingredient</string>
     <string name="edit_ingredient">Edit Ingredient</string>
     <string name="ingredient_name">Ingredient Name</string>
     <string name="quantity">Quantity</string>
-    <string name="unit">Unit</string>
+    <string name="unit">Select Unit</string>
     <string name="select_unit">Select Unit</string>
     <string name="expiry_date">Expiry Date</string>
     <string name="set_expiry_date">Set Expiry Date</string>
@@ -47,6 +48,11 @@
     <string name="ingredients_label">Ingredients:</string>
     <string name="preparation_label">Preparation Steps:</string>
     <string name="recipe_cooked_note">Tip: Once you have cooked this recipe, remember to update your pantry quantities in the My Pantry tab so your stock remains accurate!</string>
+    <string name="btn_view_almost_there">View Almost There Recipes</string>
+    <string name="almost_there_title">Almost There Recipes</string>
+    <string name="almost_there_desc">Recipes requiring just 1 more ingredient to cook:</string>
+    <string name="no_almost_recipes">No recipes are almost there.</string>
+    <string name="missing_badge_prefix">Missing: %1$s (%2$s)</string>
 
     <!-- Settings & User Preferences -->
     <string name="settings_expiry_alerts">Expiry Alerts</string>

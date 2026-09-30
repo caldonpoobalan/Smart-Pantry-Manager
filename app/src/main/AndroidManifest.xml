@@ -29,6 +29,10 @@
             android:name=".activity.RecpSpecAct"
             android:exported="false"
             android:parentActivityName=".activity.HubHomeAct" />
+        <activity
+            android:name=".activity.AlmostThereAct"
+            android:exported="false"
+            android:parentActivityName=".activity.HubHomeAct" />
     </application>
 
 </manifest>

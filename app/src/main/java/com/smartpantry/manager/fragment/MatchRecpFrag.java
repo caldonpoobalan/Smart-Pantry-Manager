@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.smartpantry.manager.R;
+import com.smartpantry.manager.activity.AlmostThereAct;
 import com.smartpantry.manager.activity.RecpSpecAct;
 import com.smartpantry.manager.adapter.RecpCardAdapt;
 import com.smartpantry.manager.database.PantryRoomDb;
@@ -35,6 +37,7 @@ public class MatchRecpFrag extends Fragment implements RecpCardAdapt.OnRecpCardC
     private View layZeroMatchNotice;
     private View layActiveMatchBanner;
     private TextView txtRecpCounter;
+    private Button btnViewAlmostThere;
     private RecpCardAdapt recpAdapt;
 
     @Nullable
@@ -46,10 +49,17 @@ public class MatchRecpFrag extends Fragment implements RecpCardAdapt.OnRecpCardC
         layZeroMatchNotice = fragVw.findViewById(R.id.lay_zero_match_notice);
         layActiveMatchBanner = fragVw.findViewById(R.id.lay_active_match_banner);
         txtRecpCounter = fragVw.findViewById(R.id.txt_recp_counter);
+        btnViewAlmostThere = fragVw.findViewById(R.id.btn_view_almost_there);
 
         recMatchedLst.setLayoutManager(new LinearLayoutManager(getContext()));
         recpAdapt = new RecpCardAdapt(new ArrayList<>(), this);
         recMatchedLst.setAdapter(recpAdapt);
+
+        // handles opening the almost there screen
+        btnViewAlmostThere.setOnClickListener(v -> {
+            Intent openAlmostInt = new Intent(getContext(), AlmostThereAct.class);
+            startActivity(openAlmostInt);
+        });
 
         return fragVw;
     }
