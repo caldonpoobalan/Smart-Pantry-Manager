@@ -19,6 +19,7 @@ import com.smartpantry.manager.activity.AlmostThereAct;
 import com.smartpantry.manager.activity.RecpSpecAct;
 import com.smartpantry.manager.adapter.RecpCardAdapt;
 import com.smartpantry.manager.database.PantryRoomDb;
+import com.smartpantry.manager.database.RecpSeedData;
 import com.smartpantry.manager.logic.RecpMatchLogic;
 import com.smartpantry.manager.model.RecpEntity;
 import com.smartpantry.manager.model.RecpIngredEntity;
@@ -74,6 +75,8 @@ public class MatchRecpFrag extends Fragment implements RecpCardAdapt.OnRecpCardC
     private void executeRecipeMatching() {
         Executors.newSingleThreadExecutor().execute(() -> {
             PantryRoomDb appDb = PantryRoomDb.getDbInst(getContext());
+            // ensures full recipe seed catalog is populated
+            RecpSeedData.ensureSeedData(appDb);
             List<StockEntity> stkItms = appDb.stockDataAcc().getAllStock();
             List<RecpEntity> allRecps = appDb.recpDataAcc().getAllRecp();
             List<RecpIngredEntity> allIngreds = appDb.recpIngredDataAcc().getAllIngred();

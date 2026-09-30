@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.smartpantry.manager.R;
 import com.smartpantry.manager.adapter.AlmostRecpAdapt;
 import com.smartpantry.manager.database.PantryRoomDb;
+import com.smartpantry.manager.database.RecpSeedData;
 import com.smartpantry.manager.logic.RecpMatchLogic;
 import com.smartpantry.manager.model.AlmostRecpItem;
 import com.smartpantry.manager.model.RecpEntity;
@@ -64,6 +65,8 @@ public class AlmostThereAct extends AppCompatActivity {
     private void loadAlmostThereRecipes() {
         Executors.newSingleThreadExecutor().execute(() -> {
             PantryRoomDb appDb = PantryRoomDb.getDbInst(this);
+            // ensures full recipe seed catalog is populated
+            RecpSeedData.ensureSeedData(appDb);
             List<StockEntity> stkItms = appDb.stockDataAcc().getAllStock();
             List<RecpEntity> allRecps = appDb.recpDataAcc().getAllRecp();
             List<RecpIngredEntity> allIngreds = appDb.recpIngredDataAcc().getAllIngred();
